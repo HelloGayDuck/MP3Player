@@ -5,68 +5,76 @@ import de.hsrm.mi.eibo.simpleplayer.SimpleAudioPlayer;
 import de.hsrm.mi.eibo.simpleplayer.SimpleMinim;
 import java.util.Scanner;
 
+/*
+Hier sind alle möglichen Reaktionen auf Inputs
+ */
+
 
 public class MP3Player {
 	public static SimpleMinim minim = new SimpleMinim(true);
 	public SimpleAudioPlayer audioPlayer;
 	Playlist actPlaylist;
 	int trackNo;
+	boolean isShuffle;
 
 	public MP3Player() {
 
 	}
 
-	public void setPlaylist(Playlist list){
-
-
+	public void setPlaylist(Playlist newPlaylist){
+		audioPlayer.pause();
+		actPlaylist = newPlaylist ;
 	}
-	void selectTrack(long no){
-
+	void selectTrack(int no){
+		audioPlayer = minim.loadMP3File(actPlaylist.getTrack(no));
 	}
+
 	public void play(int trackNo) {
-		System.out.println("Now playing: " + trackNo);
-		//audioPlayer = minim.loadMP3File(fileName);
+		selectTrack(trackNo);
 		audioPlayer.play();
+		audioPlayer.isPlaying();
 	}
 
 	public void play() {
-		System.out.println("Continuing to play");
-		audioPlayer.play();
-
+		if(audioPlayer.isPlaying()){
+			System.out.println("Der AudioPlayer spielt bereits.");
+		}else {
+			audioPlayer.play();
+		}
 	}
 
 	public  void pause() {
-		System.out.println("Pause");
 		audioPlayer.pause();
-
 	}
 
 
 	public void skip() {
 		System.out.println("skip");
 		audioPlayer.pause();
-		//in der Aktuellen Playlist muss jetzt das nächste Lied abgespielt werden
-		if(trackNo > actPlaylist.numberOfTracks()){
-			trackNo ++;
-			play(trackNo);
+		if(isShuffle){
+			
 
 		}else {
-			System.out.println("Die Playlist ist vorbei.");
+			if(trackNo > actPlaylist.numberOfTracks()){
+				trackNo ++;
+				play(trackNo);
+
+			}else {
+				System.out.println("Die Playlist ist vorbei.");
+			}
 		}
+		//in der Aktuellen Playlist muss jetzt das nächste Lied abgespielt werden
+
 	}
 
 	public void skipBack() {
-		System.out.println("skip back");
+		audioPlayer.pause();
+		if(trackNo != 0){
+			trackNo --;
+			audioPlayer.play(trackNo);
+		} else{
+			audioPlayer.rewind();
+			audioPlayer.play(trackNo);
+		}
 	}
-
-	/*
-	public static String pathInput(String eingabe) {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Gebe den Pfad ein, in dem das Lied zu finden ist. Wenn es Lokal liegt, lasse es leer.");
-		File file = new File(scan.next());
-
-		return findFile(eingabe, file)+ "\\" + eingabe;
-	}
-	*/
-	
 }

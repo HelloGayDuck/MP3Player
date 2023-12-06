@@ -21,11 +21,11 @@ public class Playlist {
     }
 
     int numberOfTracks(){
-        return 0;
+        return tracks.size();
     }
 
-    Track getTrack(int no){
-        return null;
+    public String getTrack(int no){
+        return tracks.get(no).soundFile;
     }
 
 }
