@@ -23,9 +23,9 @@ public class MP3Player {
 	void selectTrack(long no){
 
 	}
-	public void play(String fileName) {
-		System.out.println("Now playing: " + fileName);
-		audioPlayer = minim.loadMP3File(fileName);
+	public void play(int trackNo) {
+		System.out.println("Now playing: " + trackNo);
+		//audioPlayer = minim.loadMP3File(fileName);
 		audioPlayer.play();
 	}
 
@@ -44,6 +44,15 @@ public class MP3Player {
 
 	public void skip() {
 		System.out.println("skip");
+		audioPlayer.pause();
+		//in der Aktuellen Playlist muss jetzt das nächste Lied abgespielt werden
+		if(trackNo > actPlaylist.numberOfTracks()){
+			trackNo ++;
+			play(trackNo);
+
+		}else {
+			System.out.println("Die Playlist ist vorbei.");
+		}
 	}
 
 	public void skipBack() {
@@ -57,24 +66,6 @@ public class MP3Player {
 		File file = new File(scan.next());
 
 		return findFile(eingabe, file)+ "\\" + eingabe;
-	}
-
-	public static String findFile(String name, File file){
-		File[] list = file.listFiles();
-		String pfad = null;
-
-		if(list!=null)
-			for (File fil : list){
-				if (fil.isDirectory()){
-					findFile(name, file);
-				}
-				else if (name.equalsIgnoreCase(fil.getName())){
-					pfad = fil.getParentFile().toString();
-					System.out.print(fil.getParentFile());
-					return pfad;
-				}
-			} //Hier entsteht das Problem
-		return pfad;
 	}
 	*/
 	

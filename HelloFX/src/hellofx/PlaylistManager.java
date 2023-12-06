@@ -3,6 +3,8 @@ package hellofx;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -12,7 +14,7 @@ import hellofx.Playlist;
 public class PlaylistManager {
 
     String saveFilePath;
-    Map<Integer, Playlist> playlistMap;
+    List<Map<Integer,String>> playlistMap = new ArrayList<Map<Integer,String>>();
 
     public PlaylistManager() {
 
@@ -28,11 +30,19 @@ public class PlaylistManager {
         }
     }
 
+    /*
+        Hier werden die Informationen über die PLaylists und Tracks geladen
+        Ein JASONObject ist wie eine Map, desswegen kann man Ihr einfach die playlistMap geben.
+     */
     private void save(){
-        JSONObject jsonPlaylists = new JSONObject(playlistMap);
 
-        for(Playlist playlist : playlistMap.values()) {
-      
+        JSONArray jasonArray = new JSONArray();
+        jasonArray.put("lorem ipsum");
+
+        for(int i = 0; i<playlistMap.size(); i++) {
+            JSONObject jasonPlaylist = new JSONObject(playlistMap.get(i));
+            jasonArray.put(jasonPlaylist);
+
         }
     }
 }
