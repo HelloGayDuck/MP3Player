@@ -29,11 +29,10 @@ public class PlaylistManager {
     }
 
     private void save(){
-        JSONArray jsonPlaylists = new JSONArray();
+        JSONObject jsonPlaylists = new JSONObject(playlistMap);
 
         for(Playlist playlist : playlistMap.values()) {
-            JSONObject neuePlaylist = new JSONObject();
-            neuePlaylist.put()
+      
         }
     }
 }
