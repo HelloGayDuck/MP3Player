@@ -1,0 +1,81 @@
+# include <stdio.h>
+
+
+int main(int argc, char *argv[]){
+    int i = 0;
+    int zahler = argc -2;
+    char teilnehmer[26];
+
+    struct Person {
+        char name[26];
+        struct Person *next;
+    };
+
+    struct Person *first = NULL;
+    struct Person *last = NULL;
+    struct Person *new = NULL;
+
+    
+    while(scanf("%s", teilnehmer) != EOF){
+        if(first == NULL){
+            first = malloc(sizeof(struct Person));
+
+            if(!first){
+                 return 1;
+            }
+            strcpy(first->name, teilnehmer);
+            first->next = first;
+            last = first;
+
+        }else {
+            new = malloc(sizeof(struct Person));
+            if(!new){
+                return 1;
+            }
+            strcpy(new->name, teilnehmer);
+            new->next = first;
+            last->next = new;
+
+            last = new;
+
+        }
+    }
+
+
+    /*
+    Zaehler ist die Anzahl des Auszähl-Reims
+    Also "Ene mene mu und aus bist du" = 8 mal sollte weitergegangen sein
+    -1, da die Nullstelle einen Platz besitzt
+    -2, da wir den Vorletzten Teilnehmer auswählen wollen.
+    */
+    while(first->next != first){
+        for(i = 0; i< zahler; i++){
+            first = first->next;
+        }
+
+        /*
+          Wir haben unseren Pointer first, welcher auf das Element vor dem was entfernt werden soll zeigt.
+          Wir setzten den Pointer new auf das zu entfernende Element
+          Wir weisen die Verbindung zum next 
+        */
+        new = first->next;
+        first->next = first->next->next;
+        free(new);
+    }
+
+    /*
+    während der Pointer, den wir dem Element vor dem aktuellen zuweisen, nicht auf sich selbt zeigt mit next,
+
+    springen wir mit dem Pointer für jedes "ene mene... " ein Element weiter.
+
+    Wenn wir am Ende dieser aufzähkung angekommen sind, müssen wir von dem Pointer, das .next auf das .next.next setzten
+
+    (Speicherplatz freigeben!)
+
+    */
+
+
+
+
+return 0;
+}

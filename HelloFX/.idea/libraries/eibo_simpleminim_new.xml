@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="eibo_simpleminim_new">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/eibo_simpleminim_new.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/jl1.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/jsminim.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/minim.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/mp3spi1.9.5.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/ProgUtil_StaticScanner.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/tritonus_aos.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/tritonus_share.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/jl1.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/eclipse-workspace/mp3Spieler_Spielwiese/bin/ProgUtil_StaticScanner.jar!/" />
+    </SOURCES>
+  </library>
+</component>
