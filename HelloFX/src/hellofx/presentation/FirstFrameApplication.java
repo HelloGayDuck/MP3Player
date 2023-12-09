@@ -1,5 +1,6 @@
 package hellofx.presentation;
 
+import hellofx.MP3Player;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,6 +11,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.scene.input.MouseEvent;
+import javafx.event.EventHandler;
 
 public class FirstFrameApplication extends Application {
 
@@ -18,6 +21,8 @@ public class FirstFrameApplication extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
+        MP3Player mp3Player = new MP3Player();
+
         HBox root = new HBox();
         Scene scene = new Scene(new StackPane(root), 640, 480);
 
@@ -30,6 +35,16 @@ public class FirstFrameApplication extends Application {
         HBox buttons = new HBox();
         Text text = new Text();
 
+        Button a = new Button("a");
+        EventHandler<MouseEvent> play = new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent e){
+                mp3Player.play();
+            }
+        };
+
+        a.setOnMouseClicked(play);
+
         left.setMinWidth(150);
         right.setMinWidth(500);
 
@@ -41,22 +56,7 @@ public class FirstFrameApplication extends Application {
         buttons.setPadding(new Insets(15));
         buttons.setStyle("-fx-background-color: green");
 
-
-        playButton.setPrefSize(100, 20);
-        skipButton.setPrefSize(100, 20);
-        prevButton.setPrefSize(100, 20);
-        playButton.getStyleClass().add("normalButton");
-        prevButton.getStyleClass().add("normalButton");
-        skipButton.getStyleClass().add("normalButton");
-
-
-        right.setCenter(buttons);
-
-        root.getChildren().addAll(left, right);
-        buttons.getChildren().addAll(text, prevButton, playButton, skipButton);
-
-
-       primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Hello World");
         primaryStage.show();
