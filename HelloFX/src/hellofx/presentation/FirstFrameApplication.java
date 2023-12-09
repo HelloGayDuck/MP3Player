@@ -1,6 +1,6 @@
 package hellofx.presentation;
 
-import hellofx.MP3Player;
+import hellofx.bisnis.MP3Player;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -64,6 +64,6 @@ public class FirstFrameApplication extends Application {
 
     }
     public void stop(){
-
+        //Hier kann man nochmal speichern, bevor sich das Programm schließt
     }
 }

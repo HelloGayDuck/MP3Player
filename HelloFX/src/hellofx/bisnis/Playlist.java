@@ -1,4 +1,4 @@
-package hellofx;
+package hellofx.bisnis;
 
 import java.util.Date;
 import java.util.List;

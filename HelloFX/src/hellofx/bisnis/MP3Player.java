@@ -1,16 +1,18 @@
-package hellofx;
+package hellofx.bisnis;
 
-import java.io.File;
 import de.hsrm.mi.eibo.simpleplayer.SimpleAudioPlayer;
 import de.hsrm.mi.eibo.simpleplayer.SimpleMinim;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
 
 /*
-Hier sind alle möglichen Reaktionen auf Inputs
+Business
+Integrated
+System
+Network
+Interface
+Solution
  */
 
 

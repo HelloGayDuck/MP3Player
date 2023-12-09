@@ -1,14 +1,15 @@
-package hellofx;
+package hellofx.bisnis;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
 import com.mpatric.mp3agic.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import hellofx.Playlist;
+import javax.imageio.ImageIO;
+
 import java.io.File;
 
 public class PlaylistManager {
@@ -78,8 +79,9 @@ public class PlaylistManager {
 
                 byte[] albumImageData = id3v2Tag.getAlbumImage();
                 if (albumImageData != null) {
-                    System.out.println("Have album image data, length: " + albumImageData.length + " bytes");
-                    System.out.println("Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(albumImageData);
+                    BufferedImage albumImage = ImageIO.read(inputStream);
+                    ImageIO.write(albumImage, "png", new File(System.getProperty("user.home") + "/images"));
                 }
                 // Add more fields as needed
             }

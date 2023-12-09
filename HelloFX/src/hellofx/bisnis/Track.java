@@ -1,4 +1,4 @@
-package hellofx;
+package hellofx.bisnis;
 
 public class Track {
 
@@ -7,11 +7,7 @@ public class Track {
     String songName;
     String Artist;
 
-
-    /*
-    Sollte man nicht in Tracks auch die Informationen mitgeben?
-    Beim laden müssen ja die Tracks erstellt werden.
-     */
+    //song-length
 
     public Track(int id, String songName, String artist, String soundFile) {
         this.id = id;
