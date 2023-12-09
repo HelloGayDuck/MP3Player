@@ -28,24 +28,6 @@ public class MP3PlayerApp extends Application {
         Scene scene = new Scene();
         primaryStage.setScene(scene);
 
-        switchView(PLAYER);
-        primaryStage.setTitle("Player");
-        primaryStage.show();
-
     }
 
-    private void switchView(String name){
-        Scene scene = primaryStage.getScene();
-        switch(name){
-            case PLAYER:
-                scene.setRoot(playerView);
-                break;
-            case PLAYLIST:
-                scene.setRoot(playlistView);
-                break;
-            default:
-                System.out.println("Fehler bei View");
-        }
-
-    }
 }

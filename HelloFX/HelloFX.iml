@@ -11,5 +11,6 @@
     <orderEntry type="library" name="minim_library" level="project" />
     <orderEntry type="library" name="eibo_simpleminim_new" level="project" />
     <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="mpatric.mp3agic" level="project" />
   </component>
 </module>

@@ -1,15 +1,15 @@
 package hellofx;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import com.mpatric.mp3agic.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import hellofx.Playlist;
+import java.io.File;
 
 public class PlaylistManager {
 
@@ -58,55 +58,68 @@ public class PlaylistManager {
             e.printStackTrace();
         }
     }
+
     private void readID3Tags(String track) {
+        try {
+            Mp3File mp3file = new Mp3File(track);
 
-    }
+            if (mp3file.hasId3v1Tag()) {
+                ID3v1 id3v1Tag = mp3file.getId3v1Tag();
+                System.out.println("Title: " + id3v1Tag.getTitle());
+                System.out.println("Artist: " + id3v1Tag.getArtist());
+                System.out.println("Album: " + id3v1Tag.getAlbum());
+                // Add more fields as needed
+            } else if (mp3file.hasId3v2Tag()) {
+                ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                System.out.println("ID3v2 Tag Information:");
+                System.out.println("Title: " + id3v2Tag.getTitle());
+                System.out.println("Artist: " + id3v2Tag.getArtist());
+                System.out.println("Album: " + id3v2Tag.getAlbum());
 
-    private void displayTrackInfo() {
-        if (currentTag != null) {
-            String songName = currentTag.getFirst(FieldKey.TITLE);
-            String artist = currentTag.getFirst(FieldKey.ARTIST);
-            String album = currentTag.getFirst(FieldKey.ALBUM);
-            String length = player.length() / 1000 + " seconds";
-
-            // Display the information (You can customize this part based on your UI framework)
-            System.out.println("Song Name: " + songName);
-            System.out.println("Artist: " + artist);
-            System.out.println("Album: " + album);
-            System.out.println("Length: " + length);
-
-            // Display album art
-            Artwork artwork = currentTag.getFirstArtwork();
-            if (artwork != null) {
-                byte[] imageData = artwork.getBinaryData();
-                Image image = new Image(imageData);
-                ImageView imageView = new ImageView(image);
-                // You can add the ImageView to your UI
-            }
-        }
-    }
-    private void loadTracks() {
-        try (FileReader fileReader = new FileReader("tracks.json")) {
-            StringBuilder content = new StringBuilder();
-            int character;
-            while ((character = fileReader.read()) != -1) {
-                content.append((char) character);
+                byte[] albumImageData = id3v2Tag.getAlbumImage();
+                if (albumImageData != null) {
+                    System.out.println("Have album image data, length: " + albumImageData.length + " bytes");
+                    System.out.println("Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
+                }
+                // Add more fields as needed
             }
 
-            JSONArray jsonTracks = new JSONArray(content.toString());
-            tracks.clear();
-
-            for (int i = 0; i < jsonTracks.length(); i++) {
-                JSONObject jsonTrack = jsonTracks.getJSONObject(i);
-                String title = jsonTrack.getString("title");
-                String artist = jsonTrack.getString("artist");
-                String filePath = jsonTrack.getString("filePath");
-                tracks.add(new Track(title, artist, filePath));
-            }
-
-            System.out.println("Tracks loaded from tracks.json");
-        } catch (IOException e) {
+        } catch (IOException | UnsupportedTagException | InvalidDataException e) {
             e.printStackTrace();
         }
+
     }
+
+    /*
+    Liste an Tracks erstellen, die den Filepath beinhalten, danach den rest der Inhalte füllen mit dem lesen der id3tags
+     */
+
+    private void loadTracks() {
+        for (Playlist playlist : playlistMap) {
+            try (FileReader fileReader = new FileReader(saveFilePath)) {
+                StringBuilder content = new StringBuilder();
+                int character;
+                while ((character = fileReader.read()) != -1) {
+                    content.append((char) character);
+                }
+
+                JSONArray jsonTracks = new JSONArray(content.toString());
+
+                for (int i = 0; i < jsonTracks.length(); i++) {
+                    JSONObject jsonTrack = jsonTracks.getJSONObject(i);
+                    int id = jsonTrack.getInt("id");
+                    String artist = jsonTrack.getString("artist");
+                    String songName = jsonTrack.getString("songName");
+                    String filePath = jsonTrack.getString("filePath");
+                    Track newTrack = new Track(id,songName,artist,filePath);
+                    playlist.tracks.add(newTrack);
+
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
