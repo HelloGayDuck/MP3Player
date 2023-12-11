@@ -60,7 +60,7 @@ public class KeyBoardController {
                     break;
                 case "volume":
                     System.out.println("Auf was willt du die Lautstärke stellen?");
-
+                    mp3Player.adjustVolume(scan.nextFloat());
                     break;
                 default:
                     System.out.println("Diese Eingabe wurde nicht erkannt. Mit \"stop\" endet man das Programm");

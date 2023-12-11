@@ -5,6 +5,7 @@ import de.hsrm.mi.eibo.simpleplayer.SimpleMinim;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /*
 Business
@@ -18,7 +19,7 @@ Solution
 
 public class MP3Player {
 	public static SimpleMinim minim = new SimpleMinim(true);
-	public SimpleAudioPlayer audioPlayer;
+	public SimpleAudioPlayer audioPlayer; //Muss ich nicht hier einen erstellen??? Ich bin ein bisschen Verwirrt.
 	Playlist actPlaylist;
 	ArrayList<Integer> shuffleList;
 	int trackNo;
@@ -28,10 +29,6 @@ public class MP3Player {
 	}
 
 	public void setPlaylist(Playlist newPlaylist){
-		//Hier wird ein Fehler geworfen, da noch kein audioPlayer existiert?
-		if(audioPlayer.isPlaying()){
-			audioPlayer.pause();
-		}
 		actPlaylist = newPlaylist ;
 		shuffleList = createShuffledNumbers(actPlaylist.numberOfTracks());
 	}
@@ -109,5 +106,14 @@ public class MP3Player {
 	 */
 	public void adjustVolume(float volume){
 		audioPlayer.setVolume(volume);
+	}
+
+	/*
+	Wir wollen die Playlists nach dem Erstellen nicht noch bearbeiten können.
+	 */
+	public void addPlaylist(int id, String title, String creationDate, List<Track> tracks){
+		//Id braucht man eigentlich nicht. Ich habe es hier nur drin, wegen dem Auswählen über Keyboard
+		Playlist playlist = new Playlist(id, title,creationDate, tracks);
+
 	}
 }

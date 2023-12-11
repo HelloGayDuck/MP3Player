@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Playlist {
 
-    long id;
+    int id;
     String title;
     String creationDate;
     String coverFile;
     List<Track> tracks;
 
 
-    public Playlist(long id, String title, String creationDate, List<Track> tracks) {
+    public Playlist(int id, String title, String creationDate, List<Track> tracks) {
         this.id = id;
         this.title = title;
         this.creationDate = creationDate;
