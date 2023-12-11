@@ -6,6 +6,7 @@ public class Track {
     String soundFile;
     String songName;
     String Artist;
+    String picturePath;
 
     //song-length
 
@@ -14,5 +15,25 @@ public class Track {
         this.songName = songName;
         this.Artist = artist;
         this.soundFile = soundFile;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getSoundFile() {
+        return soundFile;
+    }
+
+    public String getSongName() {
+        return songName;
+    }
+
+    public String getArtist() {
+        return Artist;
+    }
+
+    public String getPicturePath() {
+        return picturePath;
     }
 }

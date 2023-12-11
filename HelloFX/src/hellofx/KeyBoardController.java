@@ -3,9 +3,11 @@ package hellofx;
 import hellofx.bisnis.MP3Player;
 import hellofx.bisnis.Playlist;
 import hellofx.bisnis.PlaylistManager;
+import hellofx.bisnis.Track;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -35,6 +37,18 @@ public class KeyBoardController {
                     break;
                 case "selectSong":
                     System.out.println("Welche Nummer willst du auswählen? \nDu kannst eine Nummer zwischen 0 und " + manager.getPlaylistMap().size() + " auswählen.");
+
+                    List<Track> tracks = manager.getPlaylistMap().get(0).getTracks();
+                    System.out.println("Welches Lied willst du auswählen?");
+                    for(Track track : tracks) {
+                        System.out.println(track.getId() + "   " + track.getSongName());
+                    }
+                    try {
+                        mp3Player.selectTrack(specialScan.nextInt());
+                    } catch(Exception exception){ {
+                        System.out.println("Diese Playlist wurde nicht gefunden.");
+                    }
+                    }
                     mp3Player.selectTrack(specialScan.nextInt());
                     mp3Player.play();
                     break;
@@ -57,6 +71,9 @@ public class KeyBoardController {
                     break;
                 case "rewind":
                     mp3Player.skipTo(scan.nextInt());
+                    break;
+                case "loop":
+                    mp3Player.isLoop = !mp3Player.isLoop;
                     break;
                 case "volume":
                     System.out.println("Auf was willt du die Lautstärke stellen?");

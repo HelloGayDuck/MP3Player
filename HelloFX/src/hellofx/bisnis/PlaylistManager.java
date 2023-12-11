@@ -23,6 +23,56 @@ public class PlaylistManager {
         saveFilePath = System.getProperty("user.home") + "/myMp3Playlists.json";
     }
 
+    /*
+    Hier wird die Playlist erstellt aus der Ordnerstruktur.
+     */
+    public void loadPlaylistFiles() throws InvalidDataException, UnsupportedTagException, IOException {
+        String mainFolderPath = "..\\songs";
+
+        File mainFolder = new File(mainFolderPath);
+
+        if (mainFolder.isDirectory()) {
+
+            File[] subfolders = mainFolder.listFiles(File::isDirectory);
+
+
+            List<String> mp3FilePaths = new ArrayList<>();
+
+
+            if (subfolders != null) {
+                for (File subfolder : subfolders) {
+                    // Filter for MP3 files
+                    File[] mp3Files = subfolder.listFiles(new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String name) {
+                            return name.toLowerCase().endsWith(".mp3");
+                        }
+                    });
+
+                    // Add paths to the list
+                    if (mp3Files != null) {
+                        for (File mp3File : mp3Files) {
+                            mp3FilePaths.add(mp3File.getAbsolutePath());
+                        }
+                    }
+                }
+            }
+
+            // Display the list of MP3 file paths
+            if (!mp3FilePaths.isEmpty()) {
+                System.out.println("List of MP3 File Paths:");
+                for (int i = 0; i < mp3FilePaths.size(); i++) {
+                    Track neu = readID3Tags(i, mp3FilePaths.get(i));
+                }
+            } else {
+                System.out.println("No MP3 files found in the subfolders.");
+            }
+        } else {
+            System.out.println("The specified path is not a directory.");
+        }
+
+    }
+
     public void load() throws InvalidDataException, UnsupportedTagException, IOException {
         File f = new File(saveFilePath);
         if(f.exists() && !f.isDirectory()){

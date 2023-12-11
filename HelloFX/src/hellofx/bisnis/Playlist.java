@@ -31,6 +31,10 @@ public class Playlist {
         return title;
     }
 
+    public List<Track> getTracks() {
+        return tracks;
+    }
+
     public long getId() {
         return id;
     }

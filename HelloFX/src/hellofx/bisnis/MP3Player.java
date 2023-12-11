@@ -24,13 +24,23 @@ public class MP3Player {
 	ArrayList<Integer> shuffleList;
 	int trackNo;
 	public boolean isShuffle;
+	public boolean isLoop;
 
 	public MP3Player() {
 	}
 
+	public void setup(Playlist defaultPaylist){
+		actPlaylist = defaultPaylist;
+		shuffleList = createShuffledNumbers(actPlaylist.numberOfTracks());
+		audioPlayer = minim.loadMP3File(actPlaylist.getTrack(0));
+	}
+
 	public void setPlaylist(Playlist newPlaylist){
+		pause();
 		actPlaylist = newPlaylist ;
 		shuffleList = createShuffledNumbers(actPlaylist.numberOfTracks());
+		selectTrack(0);
+
 	}
 
 
@@ -48,9 +58,11 @@ public class MP3Player {
 	}
 
 	public void selectTrack(int no){
+		audioPlayer.pause();
 		trackNo = no;
 		audioPlayer = minim.loadMP3File(actPlaylist.getTrack(trackNo));
 		audioPlayer.rewind();
+		play();
 	}
 
 	public void skipTo(int milli){
@@ -76,9 +88,13 @@ public class MP3Player {
 			int number = shuffleList.get((shuffleList.indexOf(trackNo)+1)%shuffleList.size());
 			selectTrack(number);
 			play();
-		}else {
+		}else if(isLoop){
+			audioPlayer.rewind();
+			play();
+		}
+		else {
 			if(trackNo < actPlaylist.numberOfTracks()){
-				selectTrack(trackNo+1);
+				selectTrack(trackNo+1 % actPlaylist.numberOfTracks()-1);
 				play();
 			}else {
 				System.out.println("Die Playlist ist vorbei.");
@@ -91,7 +107,7 @@ public class MP3Player {
 	public void skipBack() {
 		audioPlayer.pause();
 		if(trackNo != 0){
-			trackNo --;
+			trackNo = trackNo -1;
 			audioPlayer.play(trackNo);
 		} else{
 			audioPlayer.rewind();
@@ -111,9 +127,4 @@ public class MP3Player {
 	/*
 	Wir wollen die Playlists nach dem Erstellen nicht noch bearbeiten können.
 	 */
-	public void addPlaylist(int id, String title, String creationDate, List<Track> tracks){
-		//Id braucht man eigentlich nicht. Ich habe es hier nur drin, wegen dem Auswählen über Keyboard
-		Playlist playlist = new Playlist(id, title,creationDate, tracks);
-
-	}
 }
