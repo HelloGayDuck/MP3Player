@@ -7,16 +7,15 @@ public class Playlist {
 
     long id;
     String title;
-    Date creationDate;
+    String creationDate;
     String coverFile;
     List<Track> tracks;
 
 
-    public Playlist(long id, String title, Date creationDate, String coverFile, List<Track> tracks) {
+    public Playlist(long id, String title, String creationDate, List<Track> tracks) {
         this.id = id;
         this.title = title;
         this.creationDate = creationDate;
-        this.coverFile = coverFile;
         this.tracks = tracks;
     }
 
@@ -28,4 +27,11 @@ public class Playlist {
         return tracks.get(no).soundFile;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public long getId() {
+        return id;
+    }
 }

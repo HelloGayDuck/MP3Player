@@ -25,11 +25,13 @@ public class MP3Player {
 	public boolean isShuffle;
 
 	public MP3Player() {
-
 	}
 
 	public void setPlaylist(Playlist newPlaylist){
-		audioPlayer.pause();
+		//Hier wird ein Fehler geworfen, da noch kein audioPlayer existiert?
+		if(audioPlayer.isPlaying()){
+			audioPlayer.pause();
+		}
 		actPlaylist = newPlaylist ;
 		shuffleList = createShuffledNumbers(actPlaylist.numberOfTracks());
 	}
@@ -48,10 +50,14 @@ public class MP3Player {
 		return list;
 	}
 
-	void selectTrack(int no){
+	public void selectTrack(int no){
 		trackNo = no;
 		audioPlayer = minim.loadMP3File(actPlaylist.getTrack(trackNo));
 		audioPlayer.rewind();
+	}
+
+	public void skipTo(int milli){
+		audioPlayer.skip(milli);
 	}
 
 	public void play() {
@@ -94,5 +100,14 @@ public class MP3Player {
 			audioPlayer.rewind();
 			audioPlayer.play(trackNo);
 		}
+	}
+
+	/*
+	Die Lautstärke wird von 0.0 bis 1.0 eingesetzt, vielleicht kann man 10 Stufen der Lautstärke bauen?,
+	sodass wenn man am Reger schiebt, ein Punkt anvisiert wird und einrastet?,
+	oder man kann den Abstand, den der Punkt(Regler) hat in Prozent oder so herausfinden und dies Umrechnen.
+	 */
+	public void adjustVolume(float volume){
+		audioPlayer.setVolume(volume);
 	}
 }

@@ -2,6 +2,7 @@ package hellofx.bisnis;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.mpatric.mp3agic.*;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 
 import java.io.File;
+import java.util.List;
 
 public class PlaylistManager {
 
@@ -21,12 +23,19 @@ public class PlaylistManager {
         saveFilePath = System.getProperty("user.home") + "/myMp3Playlists.json";
     }
 
-    private void load(){
+    public void load() throws InvalidDataException, UnsupportedTagException, IOException {
         File f = new File(saveFilePath);
         if(f.exists() && !f.isDirectory()){
-
+            loadTracks();
         } else {
-            save();
+            List<Track> beispielTracks = new ArrayList<Track>();
+
+            beispielTracks.add(readID3Tags(1, "C:\\Users\\micha\\MP3Player\\HelloFX\\.songs\\beispiel1.mp3"));
+            beispielTracks.add(readID3Tags(2, "C:\\Users\\micha\\MP3Player\\HelloFX\\.songs\\beispiel2.mp3"));
+            beispielTracks.add(readID3Tags(3, "C:\\Users\\micha\\MP3Player\\HelloFX\\.songs\\beispiel3.mp3"));
+
+            Playlist neu = new Playlist(0,"Beispiel-Playlist", LocalDate.now().toString(),beispielTracks);
+            playlistMap.add(0, neu);
         }
     }
 
@@ -41,7 +50,7 @@ public class PlaylistManager {
         for(Playlist playlist : playlistMap) {
             JSONObject jsonPlaylist = new JSONObject();
             jsonPlaylist.put("title", playlist.title);
-            jsonPlaylist.put("creation-date", playlist.creationDate.toString());
+            jsonPlaylist.put("creation-date", playlist.creationDate);
 
             JSONArray jsonPlaylistTracks = new JSONArray();
             for(int i = 0; i < playlist.tracks.size(); i++){
@@ -60,22 +69,25 @@ public class PlaylistManager {
         }
     }
 
-    private void readID3Tags(String track) {
-        try {
-            Mp3File mp3file = new Mp3File(track);
+    private Track readID3Tags(int id, String filePath) throws InvalidDataException, UnsupportedTagException, IOException {
+            Mp3File mp3file = new Mp3File(filePath);
 
             if (mp3file.hasId3v1Tag()) {
                 ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-                System.out.println("Title: " + id3v1Tag.getTitle());
-                System.out.println("Artist: " + id3v1Tag.getArtist());
-                System.out.println("Album: " + id3v1Tag.getAlbum());
-                // Add more fields as needed
+
+                String songName = id3v1Tag.getTitle();
+                String artist = id3v1Tag.getArtist();
+
+                return new Track(id, songName, artist, filePath);
+
             } else if (mp3file.hasId3v2Tag()) {
                 ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                System.out.println("ID3v2 Tag Information:");
-                System.out.println("Title: " + id3v2Tag.getTitle());
-                System.out.println("Artist: " + id3v2Tag.getArtist());
-                System.out.println("Album: " + id3v2Tag.getAlbum());
+
+
+                String songName = id3v2Tag.getTitle();
+                String artist = id3v2Tag.getArtist();
+
+
 
                 byte[] albumImageData = id3v2Tag.getAlbumImage();
                 if (albumImageData != null) {
@@ -83,18 +95,12 @@ public class PlaylistManager {
                     BufferedImage albumImage = ImageIO.read(inputStream);
                     ImageIO.write(albumImage, "png", new File(System.getProperty("user.home") + "/images"));
                 }
-                // Add more fields as needed
+
+                return new Track(id, songName, artist, filePath);
             }
-
-        } catch (IOException | UnsupportedTagException | InvalidDataException e) {
-            e.printStackTrace();
-        }
-
+        return null;
     }
 
-    /*
-    Liste an Tracks erstellen, die den Filepath beinhalten, danach den rest der Inhalte füllen mit dem lesen der id3tags
-     */
 
     private void loadTracks() {
         for (Playlist playlist : playlistMap) {
@@ -105,23 +111,29 @@ public class PlaylistManager {
                     content.append((char) character);
                 }
 
-                JSONArray jsonTracks = new JSONArray(content.toString());
+                //JSONArray mit den Playlists
+                JSONArray jsonArray = new JSONArray(content.toString());
 
-                for (int i = 0; i < jsonTracks.length(); i++) {
-                    JSONObject jsonTrack = jsonTracks.getJSONObject(i);
-                    int id = jsonTrack.getInt("id");
-                    String artist = jsonTrack.getString("artist");
-                    String songName = jsonTrack.getString("songName");
-                    String filePath = jsonTrack.getString("filePath");
-                    Track newTrack = new Track(id,songName,artist,filePath);
-                    playlist.tracks.add(newTrack);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonTrack = jsonArray.getJSONObject(i);
+                    String title = jsonTrack.getString("title");
+                    String creation_date = jsonTrack.getString("creation-date");
 
-
+                    for(int j = 0; j < playlist.tracks.size(); j++) {
+                        Track newTrack = readID3Tags(i, playlist.tracks.get(j).soundFile);
+                        playlist.tracks.add(newTrack);
+                    }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InvalidDataException | UnsupportedTagException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
+    public ArrayList<Playlist> getPlaylistMap() {
+        return playlistMap;
+    }
 }
